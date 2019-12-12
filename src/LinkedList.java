@@ -1,0 +1,175 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.Scanner;
+
+class Node{
+String data;
+Node next;
+
+Node(String data){
+this.data=data;
+next=null;
+
+}
+}
+
+public class LinkedList {
+
+
+Node head;
+////////////////////////////////////////////////////////insert//////////////////////////////////////
+static LinkedList insert(LinkedList list,String data) {
+Node new_node=new Node(data);  //create new node with data
+new_node.next=null;
+
+if(list.head==null) {//if linkedlist empty then make new node
+list.head=new_node;
+}else {
+Node last=list.head; //else goto last node and add new node
+
+while(last.next != null) {
+last=last.next;
+}
+last.next=new_node;
+}
+return list;
+}
+
+////////////////////////////////////////////////////////traversal/////////////////////////////////////////
+
+static void printList(LinkedList list) {
+Node currNode=list.head;
+
+while(currNode != null) {
+System.out.print(currNode.data+" -> ");
+currNode=currNode.next; //goto next node
+}
+}
+
+
+//////////////////////////////////////////////////////search////////////////////////////////////////////
+
+// static void search(LinkedList list,String input) {
+// Node currNode=list.head;
+//
+// while(currNode != null && currNode.data==input) {
+//
+// System.out.print(currNode.data+" found! ");
+// currNode=currNode.next; //goto next node
+// }
+// if(currNode == null) {
+// System.out.println(key+" not found");
+// }
+//
+// }
+//////////////////////////////////////////////////////delete//////////////////////////////////////////////
+
+static LinkedList deleteByValue(LinkedList list,String value) {
+
+Node currNode=list.head;
+Node prev=null;
+
+//-----------------------case 1: key at head---------------------
+
+if(currNode != null && currNode.data==value) {
+list.head=currNode.next; //change head
+System.out.println("deleted :"+value);
+return list;
+}
+
+//---------------------case 2: key other than head--------------
+
+while(currNode !=null &&!currNode.data.equals(value)) {
+prev =currNode;
+currNode=currNode.next; // getting next node
+
+}
+
+if(currNode != null) {
+prev.next=currNode.next;
+System.out.println(value+" found and deleted");
+}
+
+//--------------------case 3:key not present----------------------
+
+if(currNode == null) {
+System.out.println(value+" not found");
+insert(list,value);
+}
+
+return list;
+}
+
+////////////////////////////////////////////////deletion at position /////////////////////////////////////////////////
+
+static LinkedList deleteByIndex(LinkedList list,int index) {
+Node currNode=list.head;
+Node prev=null;
+
+//------------------------case 1: index 0----------------------------------
+
+if(index ==0 && currNode !=null) {
+list.head=currNode.next;
+System.out.println(index+" index data deleted");
+return list;
+}
+
+//-----------------------case 2:0<index<list size------------------
+
+int counter=0;
+
+while(currNode!=null) {
+if(counter ==index) {
+prev.next=currNode.next;
+System.out.println(index+" index data deleted");
+break;
+}else {
+prev=currNode;
+currNode=currNode.next;
+counter++;
+}
+}
+
+if(currNode==null) {
+System.out.println(index+" index data deleted");
+}
+
+return list;
+}
+
+static void fileRead(String input) {
+try {
+BufferedReader br=new BufferedReader(new FileReader("/home/admin219/Documents/sushant-java/JavaProject/src/test.txt"));
+LinkedList list=new LinkedList();
+String str;
+String array[];
+
+str=br.readLine();
+array=str.split("[,/\n. ?]");
+
+for(String s:array) {
+list=insert(list,s);
+}
+printList(list);System.out.println("\n......");
+deleteByValue(list,input);
+printList(list);
+br.close();
+}
+catch(Exception e) {
+System.out.println(e);
+}
+
+}
+
+
+public static void main(String[] args) {
+
+
+System.out.println("Enter word to search:");
+Scanner sc=new Scanner(System.in);
+String input=sc.nextLine();
+fileRead(input);
+sc.close();
+}
+
+}
